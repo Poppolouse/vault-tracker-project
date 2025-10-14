@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasarım Düzenleme Alanı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-1: #0f1222;
+      --bg-2: #151932;
+      --panel: #1a1f3d;
+      --border: rgba(255,255,255,0.08);
+      --text: #e6e8ff;
+      --text-dim: #aeb3d0;
+      --chip-bg: rgba(255,255,255,0.08);
+      --success: #62d097;
+      --warning: #f5b942;
+      --danger: #ff6b6b;
+      --primary: #7b68ee;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 15% 10%, #161a32 40%, #0e1224 100%);
+    }
+
+    /* Header */
+    .editor-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: linear-gradient(180deg, rgba(10,12,24,0.85), rgba(10,12,24,0.65));
+      backdrop-filter: saturate(1.1) blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand .logo {
+      width: 32px; height: 32px;
+      display: grid; place-items: center;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #7b68ee, #a88cf0);
+      color: white; font-weight: 700;
+      box-shadow: 0 8px 24px rgba(123,104,238,0.35);
+    }
+    .title { font-weight: 600; letter-spacing: 0.2px; }
+    .meta { display:flex; align-items:center; gap:8px; color: var(--text-dim); }
+    .chip { display:flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid var(--border); border-radius:10px; background: var(--chip-bg); }
+    .badge { display:inline-grid; place-items:center; min-width:22px; height:22px; padding:0 6px; border-radius:999px; font-size:12px; font-weight:700; color:#0c0e1a; background:white; }
+
+    .header-actions { display:flex; gap:10px; }
+    .btn { padding:10px 12px; border-radius:10px; border:1px solid var(--border); background: rgba(255,255,255,0.06); color: var(--text); cursor:pointer; }
+    .btn.primary { background: linear-gradient(135deg, var(--primary), #a88cf0); border: none; color: white; font-weight:600; }
+    .btn.secondary { background: rgba(255,255,255,0.06); }
+
+    /* Layout */
+    .editor-layout { display:grid; grid-template-columns: 300px 1fr 340px; gap: 16px; padding: 16px 20px; }
+    .panel { background: linear-gradient(180deg, rgba(32,36,75,0.55), rgba(22,26,54,0.55)); border:1px solid var(--border); border-radius:14px; box-shadow: 0 20px 40px rgba(0,0,0,0.35); }
+    .panel h4 { margin:0; padding:14px 14px; border-bottom:1px solid var(--border); font-weight:600; }
+    .panel-content { padding: 14px; }
+
+    /* Tools */
+    .tool-list { display:flex; flex-direction:column; gap:8px; }
+    .tool { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background: rgba(255,255,255,0.06); cursor:pointer; }
+    .tool.active { outline: 2px solid rgba(123,104,238,0.45); }
+    .tool .icon { width:24px; text-align:center; }
+
+    /* Hierarchy */
+    .hierarchy { display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+    .hierarchy-item { display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:8px; border:1px solid var(--border); background: rgba(255,255,255,0.05); cursor:pointer; }
+    .hierarchy-item:hover { background: rgba(255,255,255,0.08); }
+    .hierarchy-item .id { color: var(--text-dim); font-size: 12px; }
+
+    /* Canvas */
+    .canvas { padding: 16px; }
+    .canvas-surface { position:relative; min-height: 560px; border-radius: 12px; background: linear-gradient(135deg, #131732, #0f1328); border:1px dashed rgba(255,255,255,0.12); overflow: hidden; }
+    .canvas-toolbar { display:flex; justify-content:flex-end; gap:8px; margin-bottom:10px; }
+    .canvas-btn { padding:8px 10px; border-radius:8px; border:1px solid var(--border); background: rgba(255,255,255,0.06); color: var(--text); cursor:pointer; }
+    .canvas-element { position:relative; border-radius:10px; border:1px solid transparent; transition: all .2s ease; }
+    .canvas-element:hover { border-color: rgba(255,255,255,0.18); }
+    .canvas-element.selected { outline: 2px solid #7b68ee; box-shadow: 0 0 0 6px rgba(123,104,238,0.18); }
+
+    /* Boundary */
+    .boundary-box { position:absolute; border: 2px dashed rgba(123,104,238,0.75); background: rgba(123,104,238,0.12); border-radius: 8px; pointer-events:none; }
+    .boundary-box .measure { position:absolute; right:6px; bottom:6px; font-size:12px; color:#d6d8ff; background: rgba(0,0,0,0.35); padding:3px 6px; border-radius:6px; }
+
+    /* Example elements */
+    .hero { margin: 16px; padding: 26px; background: linear-gradient(135deg, rgba(123,104,238,0.15), rgba(168,140,240,0.10)); }
+    .hero h2 { margin:0 0 12px; }
+    .cta { display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; background: rgba(123,104,238,0.25); color: #fff; }
+    .card { margin:16px; padding:16px; background: rgba(255,255,255,0.06); border-radius:12px; }
+
+    /* Properties */
+    .properties { display:flex; flex-direction:column; gap:10px; }
+    .prop-field { display:flex; flex-direction:column; gap:6px; }
+    .prop-field input, .prop-field select, .prop-field textarea { background: rgba(255,255,255,0.06); color: var(--text); border:1px solid var(--border); border-radius:8px; padding:8px 10px; }
+    .prop-actions { display:flex; gap:8px; }
+
+    /* Responsive */
+    @media (max-width: 1100px) { .editor-layout { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="editor-header">
+    <div class="brand">
+      <div class="logo">🎨</div>
+      <div>
+        <div class="title">Tasarım Düzenleme Alanı</div>
+        <div class="meta" id="editorMeta">
+          <span class="chip"><span class="badge" id="variantBadge">A</span><span id="variantName">Havalı/Modern</span></span>
+          <span class="chip"><span id="componentName">Navbar</span></span>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn secondary" id="backBtn">← HUB’a Dön</button>
+      <button class="btn" id="saveBtn">💾 Kaydet</button>
+      <button class="btn primary" id="previewBtn">👁️ Önizleme</button>
+    </div>
+  </header>
+
+  <main class="editor-layout">
+    <aside class="panel">
+      <h4>Araçlar</h4>
+      <div class="panel-content">
+        <div class="tool-list">
+          <div class="tool active" data-tool="element-picker"><span class="icon">🎯</span>Element Picker</div>
+          <div class="tool" data-tool="boundary-tool"><span class="icon">📐</span>Boundary Tool</div>
+          <div class="tool" data-tool="add-tool"><span class="icon">➕</span>Add Tool</div>
+        </div>
+        <div style="margin-top:14px"></div>
+        <h4 style="border:none; padding:0; margin:0 0 8px">Öğe Hiyerarşisi</h4>
+        <div id="elementHierarchy" class="hierarchy"></div>
+      </div>
+    </aside>
+
+    <section class="panel">
+      <h4>Tuval</h4>
+      <div class="panel-content canvas">
+        <div class="canvas-toolbar">
+          <button class="canvas-btn" id="resetCanvasBtn">🔄 Sıfırla</button>
+        </div>
+        <div class="canvas-surface" id="designWorkspaceCanvas"></div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <h4>Özellikler</h4>
+      <div class="panel-content">
+        <div class="properties" id="propertiesPanel">
+          <div class="prop-empty">Bir element seçin</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const VARIANT_TYPES = {
+      A: { name: 'Havalı/Modern', color: '#7b68ee' },
+      B: { name: 'Sade/Minimal',  color: '#5dbb63' },
+      C: { name: 'Detaylı/Zengin', color: '#ffa500' },
+      D: { name: 'Görsel Ağırlıklı', color: '#ff69b4' }
+    };
+
+    let currentTool = 'element-picker';
+    let boundaryState = null; // {startX, startY, boxEl}
+
+    function qs(name) { const p = new URLSearchParams(window.location.search); return p.get(name) || ''; }
+    function getVariantColor(type) { return (VARIANT_TYPES[type]?.color) || '#7b68ee'; }
+
+    function loadComponents() {
+      try {
+        const raw = localStorage.getItem('hub-components');
+        return raw ? JSON.parse(raw) : {};
+      } catch { return {}; }
+    }
+
+    function findByVariantId(variantId) {
+      const components = loadComponents();
+      for (const [id, comp] of Object.entries(components)) {
+        if ((comp.variants || []).some(v => v.id === variantId)) {
+          const variant = comp.variants.find(v => v.id === variantId);
+          return { id, component: comp, variant };
+        }
+      }
+      return null;
+    }
+
+    function generateCanvasContent(variantType) {
+      const accent = getVariantColor(variantType);
+      return `
+        <div class="canvas-element hero" data-element="hero" style="border-left:4px solid ${accent};">
+          <h2>Örnek Başlık</h2>
+          <p>Bu alan varyant tipine göre temalandı.</p>
+          <button class="canvas-element cta" data-element="button" style="background:${accent}">Primary Button</button>
+        </div>
+        <div class="canvas-element card" data-element="card">
+          <strong>Kart Başlığı</strong>
+          <div style="margin-top:8px; color: #c7cbee">İçerik alanı</div>
+        </div>
+      `;
+    }
+
+    function renderWorkspace(info) {
+      // Header meta
+      document.getElementById('componentName').textContent = info.component.name;
+      document.getElementById('variantBadge').textContent = info.variant.type;
+      document.getElementById('variantBadge').style.background = getVariantColor(info.variant.type);
+      document.getElementById('variantName').textContent = info.variant.name;
+
+      // Canvas
+      const canvas = document.getElementById('designWorkspaceCanvas');
+      canvas.innerHTML = generateCanvasContent(info.variant.type);
+      assignEditorIds();
+
+      // Bind element selection
+      bindCanvasInteractions();
+      refreshHierarchy();
+    }
+
+    function bindCanvasInteractions() {
+      document.querySelectorAll('.canvas-element').forEach(el => {
+        el.addEventListener('click', () => selectElement(el));
+      });
+      const canvas = document.getElementById('designWorkspaceCanvas');
+      // Boundary drawing
+      canvas.onmousedown = (e) => {
+        if (currentTool !== 'boundary-tool') return;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const box = document.createElement('div');
+        box.className = 'boundary-box';
+        box.style.left = x + 'px';
+        box.style.top = y + 'px';
+        box.innerHTML = '<div class="measure">0×0</div>';
+        canvas.appendChild(box);
+        boundaryState = { startX: x, startY: y, boxEl: box };
+        window.addEventListener('mousemove', onBoundaryMove);
+        window.addEventListener('mouseup', onBoundaryUp);
+      };
+      // Add element quick add
+      canvas.ondblclick = (e) => {
+        if (currentTool !== 'add-tool') return;
+        const newEl = document.createElement('div');
+        newEl.className = 'canvas-element card';
+        newEl.dataset.element = 'card';
+        newEl.style.margin = '16px';
+        newEl.style.padding = '16px';
+        newEl.textContent = 'Yeni Kart';
+        canvas.appendChild(newEl);
+        assignEditorIds();
+        bindCanvasInteractions();
+        refreshHierarchy();
+      };
+    }
+
+    function onBoundaryMove(e) {
+      if (!boundaryState) return;
+      const canvas = document.getElementById('designWorkspaceCanvas');
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const w = Math.max(4, x - boundaryState.startX);
+      const h = Math.max(4, y - boundaryState.startY);
+      boundaryState.boxEl.style.width = w + 'px';
+      boundaryState.boxEl.style.height = h + 'px';
+      const label = boundaryState.boxEl.querySelector('.measure');
+      if (label) label.textContent = `${Math.round(w)}×${Math.round(h)}`;
+    }
+
+    function onBoundaryUp() {
+      window.removeEventListener('mousemove', onBoundaryMove);
+      window.removeEventListener('mouseup', onBoundaryUp);
+      boundaryState = null;
+    }
+
+    function selectElement(el) {
+      document.querySelectorAll('.canvas-element.selected').forEach(x => x.classList.remove('selected'));
+      el.classList.add('selected');
+      const panel = document.getElementById('propertiesPanel');
+      const text = el.textContent.trim();
+      const bg = window.getComputedStyle(el).backgroundImage || el.style.background || '';
+      panel.innerHTML = `
+        <div class="prop-field">
+          <label>Metin</label>
+          <textarea id="propText" rows="3">${text}</textarea>
+        </div>
+        <div class="prop-field">
+          <label>Arka Plan Rengi</label>
+          <input id="propBg" type="text" placeholder="ör: #7b68ee veya rgba(...)" value="${el.style.background || ''}" />
+        </div>
+        <div class="prop-actions">
+          <button class="btn" id="applyProps">Uygula</button>
+          <button class="btn secondary" id="clearSelection">Seçimi Kaldır</button>
+        </div>
+      `;
+      document.getElementById('applyProps').onclick = () => {
+        const t = document.getElementById('propText').value;
+        const b = document.getElementById('propBg').value;
+        el.textContent = t;
+        el.style.background = b;
+      };
+      document.getElementById('clearSelection').onclick = () => {
+        el.classList.remove('selected');
+        panel.innerHTML = '<div class="prop-empty">Bir element seçin</div>';
+      };
+      // Hierarchy selection sync
+      const id = el.getAttribute('data-editor-id');
+      document.querySelectorAll('#elementHierarchy .hierarchy-item').forEach(i => i.classList.remove('active'));
+      const item = document.querySelector(`#elementHierarchy .hierarchy-item[data-target="${id}"]`);
+      if (item) item.classList.add('active');
+    }
+
+    function assignEditorIds() {
+      let idx = 1;
+      document.querySelectorAll('.canvas-element').forEach(el => {
+        if (!el.hasAttribute('data-editor-id')) {
+          el.setAttribute('data-editor-id', 'el-' + idx++);
+        }
+      });
+    }
+
+    function refreshHierarchy() {
+      const list = document.getElementById('elementHierarchy');
+      if (!list) return;
+      const items = Array.from(document.querySelectorAll('.canvas-element')).map(el => ({
+        id: el.getAttribute('data-editor-id'),
+        type: el.dataset.element || 'unknown'
+      }));
+      list.innerHTML = items.map(it => `
+        <div class="hierarchy-item" data-target="${it.id}">
+          <span>🔹 ${it.type}</span>
+          <span class="id">${it.id}</span>
+        </div>
+      `).join('');
+      list.querySelectorAll('.hierarchy-item').forEach(item => {
+        item.addEventListener('click', () => {
+          const target = document.querySelector(`.canvas-element[data-editor-id="${item.dataset.target}"]`);
+          if (target) selectElement(target);
+        });
+      });
+    }
+
+    function saveChanges(info) {
+      const canvas = document.getElementById('designWorkspaceCanvas');
+      const record = {
+        variantId: info.variant.id,
+        componentId: info.id,
+        savedAt: new Date().toISOString(),
+        html: canvas.innerHTML,
+        version: (() => {
+          const list = JSON.parse(localStorage.getItem('design-changes') || '[]');
+          const prev = list.filter(x => x.variantId === info.variant.id);
+          return prev.length + 1;
+        })()
+      };
+      const list = JSON.parse(localStorage.getItem('design-changes') || '[]');
+      list.push(record);
+      localStorage.setItem('design-changes', JSON.stringify(list));
+      const btn = document.getElementById('saveBtn');
+      btn.textContent = '💾 Kaydedildi';
+      btn.disabled = true;
+      setTimeout(() => { btn.textContent = '💾 Kaydet'; btn.disabled = false; }, 1500);
+    }
+
+    function previewCanvas() {
+      const canvas = document.getElementById('designWorkspaceCanvas');
+      const w = open('', '_blank');
+      w.document.write(`<html><head><title>Önizleme</title></head><body style=\"background:#0f1222;color:#e6e8ff;font-family:Inter\">${canvas.innerHTML}</body></html>`);
+      w.document.close();
+    }
+
+    function initTools(info) {
+      const tools = document.querySelectorAll('.tool');
+      tools.forEach(t => {
+        t.addEventListener('click', () => {
+          tools.forEach(x => x.classList.remove('active'));
+          t.classList.add('active');
+          const tool = t.dataset.tool;
+          const canvas = document.getElementById('designWorkspaceCanvas');
+          canvas.style.cursor = tool === 'element-picker' ? 'pointer' : tool === 'boundary-tool' ? 'crosshair' : 'copy';
+          currentTool = tool;
+        });
+      });
+      document.getElementById('resetCanvasBtn').onclick = () => {
+        const canvas = document.getElementById('designWorkspaceCanvas');
+        canvas.innerHTML = generateCanvasContent(info.variant.type);
+        bindCanvasInteractions();
+        assignEditorIds();
+        refreshHierarchy();
+      };
+    }
+
+    function setupHeaderActions(info) {
+      document.getElementById('saveBtn').onclick = () => saveChanges(info);
+      document.getElementById('previewBtn').onclick = previewCanvas;
+      document.getElementById('backBtn').onclick = () => {
+        const url = `./HUB.html?highlight=${encodeURIComponent(info.id)}`;
+        window.location.href = url;
+      };
+
+      // Shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key.toLowerCase() === 's') {
+          e.preventDefault();
+          saveChanges(info);
+        }
+        if (e.key === 'Escape') {
+          document.querySelectorAll('.canvas-element.selected').forEach(x => x.classList.remove('selected'));
+          const panel = document.getElementById('propertiesPanel');
+          panel.innerHTML = '<div class="prop-empty">Bir element seçin</div>';
+        }
+      });
+    }
+
+    function bootstrap() {
+      const variantId = qs('variantId');
+      let info = variantId ? findByVariantId(variantId) : null;
+      if (!info) {
+        // Fallback demo (localStorage boşsa)
+        info = {
+          id: 'navbar',
+          component: { name: 'Navbar', variants: [{ id: 'navbar-A', type: 'A', name: 'Havalı/Modern' }] },
+          variant: { id: 'navbar-A', type: 'A', name: 'Havalı/Modern' }
+        };
+      }
+      renderWorkspace(info);
+      initTools(info);
+      setupHeaderActions(info);
+    }
+
+    bootstrap();
+  </script>
+</body>
+</html>

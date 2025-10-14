@@ -4,6 +4,26 @@ Bu dosya projenin tüm değişikliklerini, yeniliklerini ve güncellemelerini ta
 
 ## 📅 Versiyon Geçmişi
 
+### [v0.5.2] - 2025-10-14 - Editor Workspace & HUB Highlight
+**🛠️ Bağımsız Editor Sayfası**
+- `design-docs/editor.html` bağımsız tasarım editörü eklendi.
+- Hiyerarşi paneli: Tuvaldeki elementleri listeler; panel/tuval seçimleri senkron.
+- Boundary aracı: Tuvalde sürükle-bırak ile sınır kutuları çizer ve düzenler.
+- Hızlı ekleme: Tuvalde çift tıklama ile basit element ekleme.
+- Kısayollar: `Ctrl+S` (kaydet), `Esc` (seçimi kaldır).
+- Kaydetme ve önizleme: Değişiklikler `localStorage` altında saklanır, hızlı önizleme modali.
+
+**🏠 HUB Entegrasyonu & Geri Dönüş Vurgusu**
+- Editörden HUB’a dönüşte `highlight` parametresi ile ilgili component kartı otomatik ortalanır.
+- Kısa süreli vurgulama efekti (box-shadow) ile görsel geri bildirim.
+
+**📦 Onaylanmış Değişiklikler**
+- Bu sürüm aralığında yeni onaylanmış varyant bulunamadı (`design-docs/approved/` boş).
+
+**🔧 Teknik**
+- `HUB.html` kapanışında hafif bir script ile geri dönüş vurgusu eklendi.
+- Editör tuvali etkileşimleri ve durum yönetimi (seçim, sınır çizimi) iyileştirildi.
+
 ### [v0.5.1] - 2025-10-14 - Pending Panel Type Chips
 **🧭 Pending Panel İyileştirmeleri**
 - Pending panel component bazlı sade görünüme tür chip’leri (rozet + isim) eklendi.
@@ -213,5 +233,5 @@ src/
 
 ---
 
-*Son güncelleme: 2024-12-15*  
+*Son güncelleme: 2025-10-14*  
 *Repository: https://github.com/Poppolouse/vault-tracker-project*

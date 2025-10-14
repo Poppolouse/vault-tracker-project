@@ -2141,6 +2141,23 @@
             }
         }
     </style>
+    <script>
+        // Editor'den dönüşte ilgili component kartını vurgula ve görünür alana getir
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const highlight = params.get('highlight');
+            if (!highlight) return;
+            const card = document.querySelector(`[data-component="${highlight}"]`);
+            if (card) {
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const prevBoxShadow = card.style.boxShadow;
+                    card.style.boxShadow = '0 0 0 3px rgba(123,104,238,0.9), 0 12px 30px rgba(123,104,238,0.35)';
+                    setTimeout(() => { card.style.boxShadow = prevBoxShadow; }, 1600);
+                }, 250);
+            }
+        })();
+    </script>
 </head>
 <body>
     <div class="container">
@@ -4303,16 +4320,14 @@
             openDesignWorkspace(variantId) {
                 const component = componentManager.findComponentByVariant(variantId);
                 if (!component) return;
-                
                 const variant = component.variants.find(v => v.id === variantId);
                 if (!variant) return;
 
-                // Close the modal
+                // Modalı kapat ve bağımsız sayfaya yönlendir
                 const modal = document.querySelector('.design-tools-modal');
                 if (modal) modal.remove();
-
-                // Create design workspace
-                this.createDesignWorkspace(component, variant);
+                const targetUrl = `./editor.html?variantId=${encodeURIComponent(variant.id)}&componentId=${encodeURIComponent(component.id)}`;
+                window.location.href = targetUrl;
             }
 
             createDesignWorkspace(component, variant) {
