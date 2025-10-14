@@ -4,6 +4,39 @@ Bu dosya projenin tüm değişikliklerini, yeniliklerini ve güncellemelerini ta
 
 ## 📅 Versiyon Geçmişi
 
+### [v0.5.0] - 2024-12-30 - HUB Design Upgrade: Dark & Elegant
+**🌙 Dark & Elegant Theme Uygulandı**
+- HUB.html tasarımı tamamen yenilendi
+- "Meta (HUB'un Kendisi)" kategorisi eklendi
+- 4 tasarım varyantı oluşturuldu ve test edildi:
+  - Variant A: Modern & Minimal
+  - Variant B: Colorful & Playful  
+  - Variant C: Dark & Elegant (Seçilen)
+  - Variant D: Professional & Clean
+- Variant C (Dark & Elegant) ana HUB olarak uygulandı
+
+**🎨 Dark & Elegant Özellikleri:**
+- Koyu tema (#0a0a0a background) ile modern görünüm
+- Radial gradient efektleri ve backdrop blur
+- Glass morphism tasarım dili
+- Gelişmiş hover animasyonları ve geçişler
+- Neon glow efektleri ve text shadows
+- SF Pro Display font ailesi kullanımı
+- Responsive grid sistemi ve mobile optimizasyon
+
+**📊 Yeni Meta Kategorisi:**
+- 🏠 Meta (HUB'un Kendisi): HUB Design, Category Card, Component Card
+- Toplam component sayısı: 18 → 21 (3 Meta + 18 Normal)
+- HUB Design component'i "Onaylandı" statüsünde
+
+**🔧 Teknik İyileştirmeler:**
+- Gelişmiş arama algoritması ve keyword sistemi
+- Klavye kısayolları: Ctrl+F (Arama), Ctrl+K (Yardım)
+- Otomatik istatistik güncelleme sistemi
+- Copy-to-clipboard ile gelişmiş feedback
+
+---
+
 ### [v0.4.0] - 2024-12-30 - Design Hub Creation
 **🎨 HUB.html Oluşturuldu**
 - Ana tasarım merkezi sayfası oluşturuldu: `design-docs/HUB.html`

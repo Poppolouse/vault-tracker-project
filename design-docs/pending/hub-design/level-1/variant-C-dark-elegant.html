@@ -410,7 +410,7 @@
                     <div class="component-card" data-component="hub-design">
                         <div class="component-name">HUB Design</div>
                         <div class="component-description">Ana tasarım hub'ının görünümü</div>
-                        <div class="component-status status-approved">Onaylandı</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
                         <button class="design-button" onclick="startDesign('hub-design')">🎨 Tasarım Başlat</button>
                     </div>
                     <div class="component-card" data-component="category-card">
@@ -599,104 +599,16 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p>🌙 Dark & Elegant Theme</p>
-            <p>Vault Tracker Design Hub - 21 Component ile tasarım sürecinizi yönetin</p>
-            <p>Klavye kısayolları: <strong>Ctrl+F</strong> (Arama), <strong>Ctrl+K</strong> (Komut kopyala)</p>
+            <p>🌙 Variant C: Dark & Elegant</p>
+            <p>Koyu tema, cam efektleri, sofistike tasarım</p>
+            <p><a href="../../../HUB.html">← Ana HUB'a Dön</a></p>
         </div>
     </div>
 
     <script>
-        // Component data with keywords for search
-        const components = {
-            'hub-design': ['hub', 'design', 'ana', 'tasarım', 'meta'],
-            'category-card': ['category', 'card', 'kategori', 'kart', 'meta'],
-            'component-card': ['component', 'card', 'bileşen', 'kart', 'meta'],
-            'navbar': ['navbar', 'navigation', 'menu', 'navigasyon', 'menü'],
-            'sidebar': ['sidebar', 'yan', 'menu', 'panel', 'navigasyon'],
-            'footer': ['footer', 'alt', 'bilgi', 'sayfa'],
-            'statistics-card': ['statistics', 'stats', 'istatistik', 'sayı', 'dashboard'],
-            'current-game-card': ['current', 'game', 'aktif', 'oyun', 'dashboard'],
-            'progress-chart': ['progress', 'chart', 'ilerleme', 'grafik', 'dashboard'],
-            'button': ['button', 'buton', 'form', 'click'],
-            'input-field': ['input', 'field', 'giriş', 'alan', 'form'],
-            'search-box': ['search', 'box', 'arama', 'kutu', 'form'],
-            'modal': ['modal', 'popup', 'pencere', 'overlay'],
-            'tooltip': ['tooltip', 'bilgi', 'baloncuk', 'hover'],
-            'dropdown': ['dropdown', 'açılır', 'menu', 'select'],
-            'game-list': ['game', 'list', 'oyun', 'liste', 'data'],
-            'data-table': ['data', 'table', 'veri', 'tablo', 'list'],
-            'card-grid': ['card', 'grid', 'kart', 'ızgara', 'layout'],
-            'notification': ['notification', 'bildirim', 'mesaj', 'feedback'],
-            'loading-spinner': ['loading', 'spinner', 'yükleme', 'animasyon', 'feedback'],
-            'error-message': ['error', 'message', 'hata', 'mesaj', 'feedback']
-        };
-
-        // Initialize stats
-        function updateStats() {
-            const statusElements = document.querySelectorAll('.component-status');
-            let pending = 0, approved = 0, total = statusElements.length;
-            
-            statusElements.forEach(status => {
-                if (status.classList.contains('status-pending')) pending++;
-                if (status.classList.contains('status-approved')) approved++;
-            });
-            
-            document.getElementById('pendingCount').textContent = pending;
-            document.getElementById('approvedCount').textContent = approved;
-            document.getElementById('totalCount').textContent = total;
-        }
-
-        // Generate design command
-        function generateDesignCommand(componentName) {
-            const commands = {
-                'hub-design': 'HUB tasarımı için 4 farklı varyant oluştur: Modern, Colorful, Dark, Professional',
-                'category-card': 'Kategori kartları için responsive tasarım oluştur',
-                'component-card': 'Component kartları için hover efektli tasarım oluştur',
-                'navbar': 'Responsive navbar tasarımı oluştur',
-                'sidebar': 'Collapsible sidebar tasarımı oluştur',
-                'footer': 'Modern footer tasarımı oluştur',
-                'statistics-card': 'İstatistik kartları için animasyonlu tasarım oluştur',
-                'current-game-card': 'Aktif oyun kartı için detaylı tasarım oluştur',
-                'progress-chart': 'İnteraktif progress chart tasarımı oluştur',
-                'button': 'Farklı button varyantları oluştur (primary, secondary, danger)',
-                'input-field': 'Form input alanları için validation destekli tasarım oluştur',
-                'search-box': 'Autocomplete destekli search box tasarımı oluştur',
-                'modal': 'Responsive modal tasarımı oluştur',
-                'tooltip': 'Pozisyon destekli tooltip tasarımı oluştur',
-                'dropdown': 'Multi-select dropdown tasarımı oluştur',
-                'game-list': 'Filtrelenebilir oyun listesi tasarımı oluştur',
-                'data-table': 'Sortable data table tasarımı oluştur',
-                'card-grid': 'Responsive card grid sistemi oluştur',
-                'notification': 'Toast notification sistemi oluştur',
-                'loading-spinner': 'Farklı loading animasyonları oluştur',
-                'error-message': 'Error handling mesaj sistemi oluştur'
-            };
-            
-            return commands[componentName] || `${componentName} için tasarım oluştur`;
-        }
-
-        // Start design function
+        // Simplified JavaScript for variant
         function startDesign(componentName) {
-            const command = generateDesignCommand(componentName);
-            
-            // Copy to clipboard
-            navigator.clipboard.writeText(command).then(() => {
-                // Show success message
-                const button = event.target;
-                const originalText = button.innerHTML;
-                button.innerHTML = '✅ Kopyalandı!';
-                button.style.background = 'linear-gradient(135deg, rgba(34, 197, 94, 0.8), rgba(16, 185, 129, 0.8))';
-                
-                setTimeout(() => {
-                    button.innerHTML = originalText;
-                    button.style.background = 'linear-gradient(135deg, rgba(120, 119, 198, 0.8), rgba(255, 119, 198, 0.8))';
-                }, 2000);
-                
-                console.log(`🎨 ${componentName} tasarım komutu kopyalandı:`, command);
-            }).catch(() => {
-                // Fallback: show command in alert
-                alert(`🎨 Tasarım Komutu:\n\n${command}\n\nBu komutu Claude'a yapıştırın.`);
-            });
+            alert(`🎨 ${componentName} tasarımı başlatılıyor...\n\nVariant: Dark & Elegant 🌙`);
         }
 
         // Search functionality
@@ -711,48 +623,18 @@
                 return;
             }
             
-            // Hide all cards and categories first
             componentCards.forEach(card => card.style.display = 'none');
             categories.forEach(category => category.style.display = 'none');
             
-            // Show matching cards and their categories
             componentCards.forEach(card => {
-                const componentName = card.dataset.component;
                 const name = card.querySelector('.component-name').textContent.toLowerCase();
                 const desc = card.querySelector('.component-description').textContent.toLowerCase();
-                const keywords = components[componentName] || [];
                 
-                const matches = name.includes(query) || 
-                              desc.includes(query) || 
-                              keywords.some(keyword => keyword.includes(query));
-                
-                if (matches) {
+                if (name.includes(query) || desc.includes(query)) {
                     card.style.display = 'block';
                     card.closest('.category').style.display = 'block';
                 }
             });
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            // Ctrl+F for search
-            if (e.ctrlKey && e.key === 'f') {
-                e.preventDefault();
-                document.getElementById('searchInput').focus();
-            }
-            
-            // Ctrl+K for command copy (show help)
-            if (e.ctrlKey && e.key === 'k') {
-                e.preventDefault();
-                alert('🎨 Tasarım Hub Kısayolları:\n\n• Ctrl+F: Arama kutusuna odaklan\n• Ctrl+K: Bu yardım mesajını göster\n• Component kartlarına tıklayarak tasarım komutlarını kopyalayın');
-            }
-        });
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            updateStats();
-            console.log('🎨 Tasarım Hub yüklendi - 21 component hazır!');
-            console.log('💡 İpucu: Component kartlarına tıklayarak tasarım komutlarını kopyalayabilirsiniz.');
         });
     </script>
 </body>
