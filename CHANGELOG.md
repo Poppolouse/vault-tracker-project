@@ -4,6 +4,13 @@ Bu dosya projenin tüm değişikliklerini, yeniliklerini ve güncellemelerini ta
 
 ## 📅 Versiyon Geçmişi
 
+### [v0.5.1] - 2025-10-14 - Pending Panel Type Chips
+**🧭 Pending Panel İyileştirmeleri**
+- Pending panel component bazlı sade görünüme tür chip’leri (rozet + isim) eklendi.
+- Her component kartında bekleyen varyant sayısı ve A/B/C/D türleri simgeli olarak gösteriliyor.
+- Kartlar tıklanabilir: ilgili component’e kaydırma ve Varyantlar bölümünü açma.
+- Koyu tema ile uyumlu hafif chip stilleri eklendi.
+
 ### [v0.5.0] - 2024-12-30 - HUB Design Upgrade: Dark & Elegant
 **🌙 Dark & Elegant Theme Uygulandı**
 - HUB.html tasarımı tamamen yenilendi
