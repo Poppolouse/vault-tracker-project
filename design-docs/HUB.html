@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasarım Hub - Vault Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .category-icon {
+            font-size: 2rem;
+            margin-right: 15px;
+        }
+
+        .category-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .component-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .component-card:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .component-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .component-description {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .component-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-not-started {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .design-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .design-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .design-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .categories {
+                grid-template-columns: 1fr;
+            }
+            
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>🎨 Tasarım Hub</h1>
+            <p>Vault Tracker projesi için component tasarımlarını yönet, oluştur ve onayla</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="pendingCount">0</span>
+                    <span class="stat-label">Onay Bekleyen</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="approvedCount">0</span>
+                    <span class="stat-label">Onaylanmış</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="totalCount">18</span>
+                    <span class="stat-label">Toplam Component</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <input type="text" class="search-box" placeholder="🔍 Component ara... (navbar, button, card, modal...)" id="searchInput">
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <!-- Navigation & Layout -->
+            <div class="category" data-category="navigation">
+                <div class="category-header">
+                    <span class="category-icon">🧭</span>
+                    <h2 class="category-title">Navigation & Layout</h2>
+                </div>
+                <div class="component-grid">
+                    <div class="component-card" data-component="navbar">
+                        <div class="component-name">Navbar</div>
+                        <div class="component-description">Ana navigasyon menüsü</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('navbar')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="sidebar">
+                        <div class="component-name">Sidebar</div>
+                        <div class="component-description">Yan menü paneli</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('sidebar')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="footer">
+                        <div class="component-name">Footer</div>
+                        <div class="component-description">Sayfa alt bilgi alanı</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('footer')">🎨 Tasarım Başlat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Elements -->
+            <div class="category" data-category="dashboard">
+                <div class="category-header">
+                    <span class="category-icon">📊</span>
+                    <h2 class="category-title">Dashboard Elements</h2>
+                </div>
+                <div class="component-grid">
+                    <div class="component-card" data-component="statistics-card">
+                        <div class="component-name">Statistics Card</div>
+                        <div class="component-description">İstatistik gösterim kartı</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('statistics-card')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="current-game-card">
+                        <div class="component-name">Current Game Card</div>
+                        <div class="component-description">Aktif oyun kartı</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('current-game-card')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="progress-chart">
+                        <div class="component-name">Progress Chart</div>
+                        <div class="component-description">İlerleme grafiği</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('progress-chart')">🎨 Tasarım Başlat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forms & Inputs -->
+            <div class="category" data-category="forms">
+                <div class="category-header">
+                    <span class="category-icon">📝</span>
+                    <h2 class="category-title">Forms & Inputs</h2>
+                </div>
+                <div class="component-grid">
+                    <div class="component-card" data-component="button">
+                        <div class="component-name">Button</div>
+                        <div class="component-description">Temel buton componentleri</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('button')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="input-field">
+                        <div class="component-name">Input Field</div>
+                        <div class="component-description">Metin giriş alanları</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('input-field')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="search-box">
+                        <div class="component-name">Search Box</div>
+                        <div class="component-description">Arama kutusu</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('search-box')">🎨 Tasarım Başlat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modals & Overlays -->
+            <div class="category" data-category="modals">
+                <div class="category-header">
+                    <span class="category-icon">🔲</span>
+                    <h2 class="category-title">Modals & Overlays</h2>
+                </div>
+                <div class="component-grid">
+                    <div class="component-card" data-component="modal">
+                        <div class="component-name">Modal</div>
+                        <div class="component-description">Pop-up pencereler</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('modal')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="tooltip">
+                        <div class="component-name">Tooltip</div>
+                        <div class="component-description">Bilgi baloncukları</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('tooltip')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="dropdown">
+                        <div class="component-name">Dropdown</div>
+                        <div class="component-description">Açılır menüler</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('dropdown')">🎨 Tasarım Başlat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Display -->
+            <div class="category" data-category="data">
+                <div class="category-header">
+                    <span class="category-icon">📋</span>
+                    <h2 class="category-title">Data Display</h2>
+                </div>
+                <div class="component-grid">
+                    <div class="component-card" data-component="game-list">
+                        <div class="component-name">Game List</div>
+                        <div class="component-description">Oyun listesi görünümü</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('game-list')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="data-table">
+                        <div class="component-name">Data Table</div>
+                        <div class="component-description">Veri tabloları</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('data-table')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="card-grid">
+                        <div class="component-name">Card Grid</div>
+                        <div class="component-description">Kart grid sistemi</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('card-grid')">🎨 Tasarım Başlat</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback -->
+            <div class="category" data-category="feedback">
+                <div class="category-header">
+                    <span class="category-icon">💬</span>
+                    <h2 class="category-title">Feedback</h2>
+                </div>
+                <div class="component-grid">
+                    <div class="component-card" data-component="notification">
+                        <div class="component-name">Notification</div>
+                        <div class="component-description">Bildirim mesajları</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('notification')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="loading-spinner">
+                        <div class="component-name">Loading Spinner</div>
+                        <div class="component-description">Yükleme animasyonları</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('loading-spinner')">🎨 Tasarım Başlat</button>
+                    </div>
+                    <div class="component-card" data-component="error-message">
+                        <div class="component-name">Error Message</div>
+                        <div class="component-description">Hata mesajları</div>
+                        <div class="component-status status-not-started">Başlanmadı</div>
+                        <button class="design-button" onclick="startDesign('error-message')">🎨 Tasarım Başlat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>🎨 Vault Tracker Design Hub - Phase 3</p>
+            <p>Tasarım workflow'u için <a href="docs/DESIGN-WORKFLOW.md">DESIGN-WORKFLOW.md</a> dosyasını inceleyin</p>
+            <p>Proje durumu: <strong>3/14 Phase Tamamlandı</strong></p>
+        </div>
+    </div>
+
+    <script>
+        // Component data
+        const components = {
+            // Navigation & Layout
+            'navbar': { category: 'navigation', keywords: ['nav', 'navbar', 'menu', 'navigation', 'header'] },
+            'sidebar': { category: 'navigation', keywords: ['sidebar', 'side', 'menu', 'panel'] },
+            'footer': { category: 'navigation', keywords: ['footer', 'alt', 'bottom'] },
+            
+            // Dashboard Elements
+            'statistics-card': { category: 'dashboard', keywords: ['statistics', 'stats', 'card', 'istatistik'] },
+            'current-game-card': { category: 'dashboard', keywords: ['game', 'card', 'oyun', 'current'] },
+            'progress-chart': { category: 'dashboard', keywords: ['progress', 'chart', 'grafik', 'ilerleme'] },
+            
+            // Forms & Inputs
+            'button': { category: 'forms', keywords: ['button', 'buton', 'btn'] },
+            'input-field': { category: 'forms', keywords: ['input', 'field', 'giriş', 'alan'] },
+            'search-box': { category: 'forms', keywords: ['search', 'arama', 'box'] },
+            
+            // Modals & Overlays
+            'modal': { category: 'modals', keywords: ['modal', 'popup', 'pencere'] },
+            'tooltip': { category: 'modals', keywords: ['tooltip', 'baloncuk', 'info'] },
+            'dropdown': { category: 'modals', keywords: ['dropdown', 'açılır', 'select'] },
+            
+            // Data Display
+            'game-list': { category: 'data', keywords: ['game', 'list', 'oyun', 'liste'] },
+            'data-table': { category: 'data', keywords: ['table', 'tablo', 'data'] },
+            'card-grid': { category: 'data', keywords: ['card', 'grid', 'kart'] },
+            
+            // Feedback
+            'notification': { category: 'feedback', keywords: ['notification', 'bildirim', 'message'] },
+            'loading-spinner': { category: 'feedback', keywords: ['loading', 'spinner', 'yükleme'] },
+            'error-message': { category: 'feedback', keywords: ['error', 'hata', 'message'] }
+        };
+
+        // Design start function
+        function startDesign(componentName) {
+            const command = generateDesignCommand(componentName);
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(command).then(() => {
+                // Show success feedback
+                const button = event.target;
+                const originalText = button.innerHTML;
+                button.innerHTML = '📋 Kopyalandı!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                }, 2000);
+                
+                // Show instructions
+                alert(`✅ Tasarım komutu panoya kopyalandı!\n\n📋 Sonraki adımlar:\n1. Trae AI'da Claude'a yapıştır\n2. Claude 4 varyant oluşturacak\n3. HUB otomatik güncellenecek\n\nKomponent: ${componentName}`);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = command;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                alert('✅ Tasarım komutu kopyalandı! Trae AI\'da Claude\'a yapıştırın.');
+            });
+        }
+
+        // Generate design command
+        function generateDesignCommand(componentName) {
+            const componentMap = {
+                'navbar': 'Navbar (Ana navigasyon menüsü)',
+                'sidebar': 'Sidebar (Yan menü paneli)',
+                'footer': 'Footer (Sayfa alt bilgi alanı)',
+                'statistics-card': 'Statistics Card (İstatistik gösterim kartı)',
+                'current-game-card': 'Current Game Card (Aktif oyun kartı)',
+                'progress-chart': 'Progress Chart (İlerleme grafiği)',
+                'button': 'Button (Temel buton componentleri)',
+                'input-field': 'Input Field (Metin giriş alanları)',
+                'search-box': 'Search Box (Arama kutusu)',
+                'modal': 'Modal (Pop-up pencereler)',
+                'tooltip': 'Tooltip (Bilgi baloncukları)',
+                'dropdown': 'Dropdown (Açılır menüler)',
+                'game-list': 'Game List (Oyun listesi görünümü)',
+                'data-table': 'Data Table (Veri tabloları)',
+                'card-grid': 'Card Grid (Kart grid sistemi)',
+                'notification': 'Notification (Bildirim mesajları)',
+                'loading-spinner': 'Loading Spinner (Yükleme animasyonları)',
+                'error-message': 'Error Message (Hata mesajları)'
+            };
+
+            const description = componentMap[componentName] || componentName;
+            
+            return `🎨 TASARIM İSTEĞİ - Vault Tracker Project
+
+Component: ${description}
+
+Görev:
+1. design-docs/pending/001-${componentName}/ klasörü oluştur
+2. level-1/ alt klasörü oluştur  
+3. 4 HTML varyant dosyası oluştur:
+   - variant-A-havali.html (Modern/Cesur tasarım)
+   - variant-B-sade.html (Minimal/Temiz tasarım)
+   - variant-C-detayli.html (Detaylı/Zengin tasarım)
+   - variant-D-gorsel.html (Görsel/Renkli tasarım)
+
+Her varyant için:
+- Tam HTML + CSS (inline styles)
+- Responsive tasarım
+- Modern UI/UX prensipleri
+- Vault Tracker temasına uygun
+- Açıklayıcı yorumlar
+
+Tamamlandığında HUB.html'i güncelle ve istatistikleri yenile.
+
+Başla!`;
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            const componentCards = document.querySelectorAll('.component-card');
+            const categories = document.querySelectorAll('.category');
+            
+            if (query === '') {
+                // Show all
+                componentCards.forEach(card => card.style.display = 'block');
+                categories.forEach(category => category.style.display = 'block');
+                return;
+            }
+            
+            // Hide all first
+            componentCards.forEach(card => card.style.display = 'none');
+            categories.forEach(category => category.style.display = 'none');
+            
+            // Show matching components
+            Object.keys(components).forEach(componentName => {
+                const component = components[componentName];
+                const keywords = component.keywords.join(' ').toLowerCase();
+                
+                if (keywords.includes(query) || componentName.includes(query)) {
+                    const card = document.querySelector(`[data-component="${componentName}"]`);
+                    const category = document.querySelector(`[data-category="${component.category}"]`);
+                    
+                    if (card) card.style.display = 'block';
+                    if (category) category.style.display = 'block';
+                }
+            });
+        });
+
+        // Update statistics
+        function updateStats() {
+            // These will be updated when designs are created
+            document.getElementById('pendingCount').textContent = '0';
+            document.getElementById('approvedCount').textContent = '0';
+            document.getElementById('totalCount').textContent = '18';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            console.log('🎨 Tasarım Hub yüklendi - 18 component hazır!');
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + K for search focus
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+            
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                const searchInput = document.getElementById('searchInput');
+                searchInput.value = '';
+                searchInput.dispatchEvent(new Event('input'));
+            }
+        });
+    </script>
+</body>
+</html>

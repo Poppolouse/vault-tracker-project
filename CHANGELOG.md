@@ -4,6 +4,39 @@ Bu dosya projenin tüm değişikliklerini, yeniliklerini ve güncellemelerini ta
 
 ## 📅 Versiyon Geçmişi
 
+### [v0.4.0] - 2024-12-30 - Design Hub Creation
+**🎨 HUB.html Oluşturuldu**
+- Ana tasarım merkezi sayfası oluşturuldu: `design-docs/HUB.html`
+- 6 ana kategori eklendi (Navigation, Dashboard, Forms, Modals, Data Display, Feedback)
+- 18 component kartı eklendi (her kategoride 3 component)
+- "Tasarım Başlat" butonları eklendi
+- Arama ve filtreleme sistemi eklendi
+- İstatistik dashboard eklendi
+
+**🎨 Tasarım Özellikleri:**
+- Modern gradient background
+- Responsive grid layout
+- Interactive component cards
+- Keyboard shortcuts (Ctrl+K, Escape)
+- Copy-to-clipboard functionality
+- Status tracking system
+
+**📊 Component Kategorileri:**
+- 🧭 Navigation & Layout: Navbar, Sidebar, Footer
+- 📊 Dashboard Elements: Statistics Card, Current Game Card, Progress Chart
+- 📝 Forms & Inputs: Button, Input Field, Search Box
+- 🔲 Modals & Overlays: Modal, Tooltip, Dropdown
+- 📋 Data Display: Game List, Data Table, Card Grid
+- 💬 Feedback: Notification, Loading Spinner, Error Message
+
+**🔧 Commit Detayları:**
+- Dosya boyutu: ~15KB (HTML + CSS + JS)
+- Responsive tasarım: ✅ Mobile-friendly
+- Component sayısı: 18
+- Kategori sayısı: 6
+
+---
+
 ### [v0.3.0] - 2024-12-15 - GitHub Integration
 **🚀 GitHub Repository Kurulumu**
 - GitHub repository oluşturuldu: `https://github.com/Poppolouse/vault-tracker-project`
